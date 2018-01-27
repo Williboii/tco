@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E17E808201298AD00CB8F89 /* DXiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E17E807201298AD00CB8F89 /* DXiViewController.swift */; };
+		2E17E80A201298D800CB8F89 /* DXiOutputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E17E809201298D800CB8F89 /* DXiOutputViewController.swift */; };
+		2E17E80C2012992300CB8F89 /* TapeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E17E80B2012992300CB8F89 /* TapeViewController.swift */; };
+		2E17E80E2012993400CB8F89 /* TapeOutputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E17E80D2012993400CB8F89 /* TapeOutputViewController.swift */; };
+		2E17E84C2015F80200CB8F89 /* DXiTCOConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E17E84B2015F80200CB8F89 /* DXiTCOConfig.swift */; };
 		2E201F852012711100BA4650 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E201F842012711100BA4650 /* AppDelegate.swift */; };
 		2E201F872012711100BA4650 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E201F862012711100BA4650 /* ViewController.swift */; };
 		2E201F8A2012711100BA4650 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E201F882012711100BA4650 /* Main.storyboard */; };
@@ -15,6 +20,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2E17E807201298AD00CB8F89 /* DXiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXiViewController.swift; sourceTree = "<group>"; };
+		2E17E809201298D800CB8F89 /* DXiOutputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXiOutputViewController.swift; sourceTree = "<group>"; };
+		2E17E80B2012992300CB8F89 /* TapeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapeViewController.swift; sourceTree = "<group>"; };
+		2E17E80D2012993400CB8F89 /* TapeOutputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapeOutputViewController.swift; sourceTree = "<group>"; };
+		2E17E84B2015F80200CB8F89 /* DXiTCOConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DXiTCOConfig.swift; sourceTree = "<group>"; };
 		2E201F812012711100BA4650 /* QuantumTCO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuantumTCO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E201F842012711100BA4650 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2E201F862012711100BA4650 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,10 +66,15 @@
 			children = (
 				2E201F842012711100BA4650 /* AppDelegate.swift */,
 				2E201F862012711100BA4650 /* ViewController.swift */,
+				2E17E807201298AD00CB8F89 /* DXiViewController.swift */,
 				2E201F882012711100BA4650 /* Main.storyboard */,
+				2E17E80B2012992300CB8F89 /* TapeViewController.swift */,
+				2E17E80D2012993400CB8F89 /* TapeOutputViewController.swift */,
+				2E17E809201298D800CB8F89 /* DXiOutputViewController.swift */,
 				2E201F8B2012711100BA4650 /* Assets.xcassets */,
 				2E201F8D2012711100BA4650 /* LaunchScreen.storyboard */,
 				2E201F902012711100BA4650 /* Info.plist */,
+				2E17E84B2015F80200CB8F89 /* DXiTCOConfig.swift */,
 			);
 			path = QuantumTCO;
 			sourceTree = "<group>";
@@ -137,7 +152,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E201F872012711100BA4650 /* ViewController.swift in Sources */,
+				2E17E84C2015F80200CB8F89 /* DXiTCOConfig.swift in Sources */,
+				2E17E80A201298D800CB8F89 /* DXiOutputViewController.swift in Sources */,
+				2E17E808201298AD00CB8F89 /* DXiViewController.swift in Sources */,
 				2E201F852012711100BA4650 /* AppDelegate.swift in Sources */,
+				2E17E80C2012992300CB8F89 /* TapeViewController.swift in Sources */,
+				2E17E80E2012993400CB8F89 /* TapeOutputViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

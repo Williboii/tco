@@ -9,9 +9,31 @@
 import UIKit
 
 class DXiOutputViewController: UIViewController {
+    
+    var dXiTCOConfig = DXiTCOConfig(oldDXiModel:"",
+                                    oldDXiCapacity:"",
+                                    remainingServiceMonths: 0,
+                                    renewalMonthlyPrice: 0,
+                                    newServiceRenewal: "",
+                                    newServiceRenewalDiscount: 0.0,
+                                    newDXiModel: "",
+                                    newDXiCapacity: "",
+                                    supportContractUplift: "",
+                                    hardWareDiscount: 0.0,
+                                    supportDiscount: 0.0,
+                                    firstYearPromo: false)
 
+    
+    @IBOutlet weak var oldConfigurationLabel: UILabel!
+    
+    @IBOutlet weak var newConfigurationLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // set up view using TCO Configuration Label
+        oldConfigurationLabel.text = dXiTCOConfig.oldDXiCapacity + " TB " + dXiTCOConfig.oldDXiModel
+        newConfigurationLabel.text = dXiTCOConfig.newDXiCapacity + " TB " + dXiTCOConfig.newDXiModel
 
         // Do any additional setup after loading the view.
     }

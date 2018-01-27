@@ -11,6 +11,7 @@ import UIKit
 
 class DXiViewController: UIViewController {
     
+    
     // MARK: - Set-up Arrays of Configurations for the DXi
     
     let oldConfigs = ["DXi4510", "DXi4520", "DXi4600", "DXi6700-8TBEXP", "DXi6700-16TBEXP", "DXi6800", "DXi8500-1TB", "DXi8500-2TB", "DXi8500-3TB"]
@@ -20,6 +21,8 @@ class DXiViewController: UIViewController {
     let oldServiceRenewals = ["Bronze", "NBD Gold", "Gold"]
     
     let newServiceContracts = ["1yr Bze", "1yr NBDG", "1yr Gold", "3yrs Bze", "3yrs NBDG", "3yrs Gold"]
+    
+    let nrMonths = [Int](1...60)
     
     /*
     let oldConfigsCapacities : [String:[Int]] = ["DXi4510":[4],
@@ -54,42 +57,85 @@ class DXiViewController: UIViewController {
     
     let upliftContracts = ["Gold"]
     
-    
     var selectedOldConfig = "DXi4510"
     var selectedNewConfig = "DXi4700"
     
-
+    var dXiTCOConfig = DXiTCOConfig(oldDXiModel:"Passed from 1",
+                                    oldDXiCapacity:"Passed from 1",
+                                    remainingServiceMonths: 0,
+                                    renewalMonthlyPrice: 0,
+                                    newServiceRenewal: "",
+                                    newServiceRenewalDiscount: 0.0,
+                                    newDXiModel: "Passed from 1",
+                                    newDXiCapacity: "Passed from 1",
+                                    supportContractUplift: "",
+                                    hardWareDiscount: 0.0,
+                                    supportDiscount: 0.0,
+                                    firstYearPromo: false)
+    
+    
+    // MARK: - pickerView
+    var pickerView = UIPickerView()
+    var activeTextField = UITextField()
+    
     
     // MARK: - Outlets
+ 
+    // currency
+    @IBOutlet weak var currencySelector: UISegmentedControl!
+    @IBOutlet weak var currencyLabel: UILabel!
     
-    @IBOutlet weak var oldDXiModelPicker: UIPickerView!
-    @IBOutlet weak var oldDXiCapacityPicker: UIPickerView!
-    @IBOutlet weak var oldDXiServiceRenewalPicker: UIPickerView!
+    // old DXi fields
+    @IBOutlet weak var oldDXiModelField: UITextField!
+    @IBOutlet weak var oldDXiCapacityField: UITextField!
+    @IBOutlet weak var remainingServiceMonthField: UITextField!
+    @IBOutlet weak var newServiceRenewalField: UITextField!
+    @IBOutlet weak var renewalMonthlyPriceField: UITextField!
+    @IBOutlet weak var serviceRenewalDiscountField: UITextField!
+    
+    // New DXi fields
+    @IBOutlet weak var newDXiModelField: UITextField!
+    @IBOutlet weak var newDXiCapacityField: UITextField!
+    @IBOutlet weak var newSupportContractField: UITextField!
+    @IBOutlet weak var newHardwareDiscountField: UITextField!
+    @IBOutlet weak var newSupportDiscountField: UITextField!
     
     
-    @IBOutlet weak var newDXiModelPicker: UIPickerView!
-    @IBOutlet weak var newDXiCapacityPicker: UIPickerView!
-    @IBOutlet weak var newDXiSupportContractPicker: UIPickerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // delegate & datasource settings
-        oldDXiModelPicker.delegate = self
-        oldDXiCapacityPicker.delegate = self
-        oldDXiServiceRenewalPicker.delegate = self
-        newDXiModelPicker.delegate = self
-        newDXiCapacityPicker.delegate = self
-        newDXiSupportContractPicker.delegate = self
+        // set picker-managed text fields
+        oldDXiModelField.inputView = pickerView
+        oldDXiCapacityField.inputView = pickerView
+        remainingServiceMonthField.inputView = pickerView
+        newServiceRenewalField.inputView = pickerView
         
-        oldDXiModelPicker.dataSource = self
-        oldDXiCapacityPicker.dataSource  = self
-        oldDXiServiceRenewalPicker.dataSource = self
-        newDXiModelPicker.dataSource = self
-        newDXiCapacityPicker.dataSource = self
-        newDXiSupportContractPicker.dataSource = self
+        newDXiModelField.inputView = pickerView
+        newDXiCapacityField.inputView = pickerView
+        newSupportContractField.inputView = pickerView
         
-        // Additional programmatic settings for Interface
+        // set up delegate and datasource for picker and text fields
+        pickerView.dataSource = self
+        pickerView.delegate = self
+        oldDXiModelField.delegate = self
+        oldDXiCapacityField.delegate = self
+        remainingServiceMonthField.delegate = self
+        newServiceRenewalField.delegate = self
+        newDXiModelField.delegate = self
+        newDXiCapacityField.delegate = self
+        newSupportContractField.delegate = self
+        
+        
+        // set text field limitations
+        renewalMonthlyPriceField.keyboardType = .numberPad
+        serviceRenewalDiscountField.keyboardType = .decimalPad
+        newHardwareDiscountField.keyboardType = .decimalPad
+        newSupportDiscountField.keyboardType = .decimalPad
+        
+        // disable capacity text fields until a model is selected
+        oldDXiCapacityField.isEnabled = false
+        newDXiCapacityField.isEnabled = false
         
     }
 
@@ -98,9 +144,38 @@ class DXiViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        // test if all text fields have been filled and implement an alert if not the case
+        // GC: - Right Implementation ?
+        
+        /* for case let textField as UITextField in self.view.subviews {
+            if textField.text == "" {
+                let ac = UIAlertController(title: "Error", message: "Make sure all fields are filled", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Ok", style: .default, handler: {_ in return} ))
+                present(ac,animated: true, completion: nil)
+                print("one empty field")
+                // return
+            }
+        } */
+        let controller = segue.destination as! DXiOutputViewController
+        controller.dXiTCOConfig = self.dXiTCOConfig
+    }
+    
+    
+    
+    // MARK: - Actions
+    
     @IBAction func cancel(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    
+    @IBAction func changeCurrency(_ sender: Any) {
+        currencyLabel.text = currencySelector.titleForSegment(at: currencySelector.selectedSegmentIndex)
+    }
+    
+    
+    
     
     /*
     // MARK: - Navigation
@@ -113,32 +188,55 @@ class DXiViewController: UIViewController {
     */
 }
 
-extension DXiViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension DXiViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
+
+    // MARK: - Field Delegate / provides active text field tag
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        // prevents the field to be using the wrong pickerview
+        activeTextField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        activeTextField = textField
+    }
+    
+    
+    /*
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    */
+    
+    // MARK: - Picker Delegate Management
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    // edit pickers font & colors
-    
-    
-    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch pickerView.tag {
-        case 1:
-            return oldConfigsCapacities[selectedOldConfig]!.count //DEBUG
+        switch activeTextField.tag {
+        
         case 2:
-            return oldServiceRenewals.count
+            return oldConfigsCapacities[selectedOldConfig]!.count //DEBUG
         case 3:
-            return newConfigs.count
+            return nrMonths.count
         case 4:
-            return newConfigsCapacities[selectedNewConfig]!.count //DEBUG
+            return oldServiceRenewals.count
         case 5:
+            return newConfigs.count
+        case 6:
+            return newConfigsCapacities[selectedNewConfig]!.count //DEBUG
+        case 7:
             return newServiceContracts.count
         default:
             return oldConfigs.count
         }
     }
     
+    // --- Retired non formatted pickers
+    /*
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView.tag {
         case 1:
@@ -155,29 +253,70 @@ extension DXiViewController: UIPickerViewDelegate, UIPickerViewDataSource {
             return oldConfigs[row]
         }
     }
+   */
     
     
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        switch activeTextField.tag {
+        case 2:
+            return (oldConfigsCapacities[selectedOldConfig]![row] + " TB") // TO SECURE
+        case 3:
+            return "\(nrMonths[row])"
+        case 4:
+            return oldServiceRenewals[row]
+        case 5:
+            return newConfigs[row]
+        case 6:
+            return (newConfigsCapacities[selectedNewConfig]![row] + " TB")// TO SECURE
+        case 7:
+            return newServiceContracts[row]
+        default:
+            return oldConfigs[row]
+        }
+    }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        switch pickerView.tag {
-        case 1:
-            return
+        switch activeTextField.tag {
         case 2:
-            return
+            dXiTCOConfig.oldDXiCapacity = oldConfigsCapacities[selectedOldConfig]![row] // TO SECURE
+            oldDXiCapacityField.text = oldConfigsCapacities[selectedOldConfig]![row]
+            activeTextField.resignFirstResponder()
         case 3:
-            selectedNewConfig = newConfigs[row]
-            print(newConfigs[row]) // debug
-            newDXiModelPicker.reloadAllComponents()
-            newDXiCapacityPicker.reloadAllComponents()
+            dXiTCOConfig.remainingServiceMonths = nrMonths[row]
+            remainingServiceMonthField.text = "\(nrMonths[row])"
+            activeTextField.resignFirstResponder()
         case 4:
-            return
+            dXiTCOConfig.newServiceRenewal = oldServiceRenewals[row]
+            newServiceRenewalField.text = oldServiceRenewals[row]
+            activeTextField.resignFirstResponder()
         case 5:
-            return
+            dXiTCOConfig.newDXiModel = newConfigs[row]
+            selectedNewConfig = newConfigs[row]
+            newDXiModelField.text = newConfigs[row]
+            // print(newConfigs[row]) // debug
+            //newDXiModelPicker.reloadAllComponents()
+            //newDXiCapacityPicker.reloadAllComponents()
+            if !newDXiCapacityField.isEnabled { newDXiCapacityField.isEnabled = true }
+            activeTextField.resignFirstResponder()
+        case 6:
+            dXiTCOConfig.newDXiCapacity = newConfigsCapacities[selectedNewConfig]![row] // TO SECURE
+            newDXiCapacityField.text = newConfigsCapacities[selectedNewConfig]![row]
+            activeTextField.resignFirstResponder()
+        case 7:
+            dXiTCOConfig.supportContractUplift = newServiceContracts[row]
+            newSupportContractField.text = newServiceContracts[row]
+            activeTextField.resignFirstResponder()
         default:
+            dXiTCOConfig.oldDXiModel = oldConfigs[row]
             selectedOldConfig = oldConfigs[row]
-            print(oldConfigs[row]) // debug
-            oldDXiModelPicker.reloadAllComponents()
-            oldDXiCapacityPicker.reloadAllComponents()
+            oldDXiModelField.text = oldConfigs[row]
+            // print(oldConfigs[row]) // debug
+            // print(selectedOldConfig)
+            activeTextField.resignFirstResponder()
+            //oldDXiModelPicker.reloadAllComponents()
+            //oldDXiCapacityPicker.reloadAllComponents()
+            if !oldDXiCapacityField.isEnabled { oldDXiCapacityField.isEnabled = true }
         }
     }
     
