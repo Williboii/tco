@@ -294,6 +294,8 @@ extension DXiViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITex
             dXiTCOConfig.newDXiModel = newConfigs[row]
             selectedNewConfig = newConfigs[row]
             newDXiModelField.text = newConfigs[row]
+            newDXiCapacityField.text = "" // re-init model field to avoid capacity/model incompatibility
+            dXiTCOConfig.newDXiCapacity = ""
             // print(newConfigs[row]) // debug
             //newDXiModelPicker.reloadAllComponents()
             //newDXiCapacityPicker.reloadAllComponents()
@@ -311,6 +313,8 @@ extension DXiViewController: UIPickerViewDelegate, UIPickerViewDataSource, UITex
             dXiTCOConfig.oldDXiModel = oldConfigs[row]
             selectedOldConfig = oldConfigs[row]
             oldDXiModelField.text = oldConfigs[row]
+            oldDXiCapacityField.text = "" // re-init model field to avoid capacity/model incompatibility
+            dXiTCOConfig.oldDXiCapacity = ""
             // print(oldConfigs[row]) // debug
             // print(selectedOldConfig)
             activeTextField.resignFirstResponder()
